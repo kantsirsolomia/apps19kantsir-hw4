@@ -5,6 +5,8 @@ import ua.edu.ucu.tries.Tuple;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author andrii
@@ -18,20 +20,16 @@ public class PrefixMatches {
     }
 
     public int load(String... strings) {
-        if (strings.length <= 2) {
-            return 0;
-        } else {
-            int counter = 0;
-            for (String str : strings) {
-                String[] strArr = str.split("\\s+");
-                for (String el : strArr) {
-                    int len = el.length();
-                    trie.add(new Tuple(el, len));
+        int counter = 0;
+        if (strings.length > 2) {
+            for (String s : strings) {
+                for (String el : Pattern.compile("\\s+").split(s)) {
+                    trie.add(new Tuple(el, el.length()));
                     counter++;
                 }
             }
-            return counter;
         }
+        return counter;
     }
 
     public boolean contains(String word) {
@@ -50,23 +48,19 @@ public class PrefixMatches {
         if (pref.length() < 2) {
             throw new IllegalArgumentException();
         }
-        ArrayList<String> words = new ArrayList<>();
+        List<String> words = new ArrayList<>();
         Iterable<String> trieWords = trie.wordsWithPrefix(pref);
-
-
         if (k == 1) {
             words.add(pref);
-            return words;
+        } else {
+            for (String w : trieWords) {
+                words.add(w);
+            }
+            words.sort(Comparator.comparingInt(String::length));
+            int cut = Math.min(words.size(), k + 1);
+            words = words.subList(0, cut);
         }
-        for (String w : trieWords) {
-            words.add(w);
-        }
-
-
-        words.sort(Comparator.comparingInt(String::length));
-
-        int cut = Math.min(words.size(), k + 1);
-        return words.subList(0, cut);
+        return words;
     }
 
     public int size() {
