@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
- *
  * @author andrii
  */
 public class PrefixMatches {
@@ -19,16 +18,15 @@ public class PrefixMatches {
     }
 
     public int load(String... strings) {
-        if (strings.length <= 2){
+        if (strings.length <= 2) {
             return 0;
-        }
-        else{
+        } else {
             int counter = 0;
-            for (String str: strings) {
-                String[] strArr =  str.split("\\s+");
-                for(String el: strArr){
+            for (String str : strings) {
+                String[] strArr = str.split("\\s+");
+                for (String el : strArr) {
                     int len = el.length();
-                    trie.add(new Tuple (el, len));
+                    trie.add(new Tuple(el, len));
                     counter++;
                 }
             }
@@ -49,20 +47,25 @@ public class PrefixMatches {
     }
 
     public Iterable<String> wordsWithPrefix(String pref, int k) {
+        if (pref.length() < 2) {
+            throw new IllegalArgumentException();
+        }
         ArrayList<String> words = new ArrayList<>();
         Iterable<String> trieWords = trie.wordsWithPrefix(pref);
 
-        if (pref.length() >= 2) {
-            for (String w : trieWords) {
-                words.add(w);
-                }
 
-            }
+        if (k == 1) {
+            words.add(pref);
+            return words;
+        }
+        for (String w : trieWords) {
+            words.add(w);
+        }
+
 
         words.sort(Comparator.comparingInt(String::length));
-        int cut = Math.min(words.size(), k+1);
 
-
+        int cut = Math.min(words.size(), k + 1);
         return words.subList(0, cut);
     }
 
