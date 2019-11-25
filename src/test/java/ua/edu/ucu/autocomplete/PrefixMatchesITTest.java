@@ -29,6 +29,7 @@ public class PrefixMatchesITTest {
 
         String[] expResult = {"abc", "abce", "abcd", "abcde", "abcdef"};
 
+
         assertThat(result, containsInAnyOrder(expResult));
     }
 

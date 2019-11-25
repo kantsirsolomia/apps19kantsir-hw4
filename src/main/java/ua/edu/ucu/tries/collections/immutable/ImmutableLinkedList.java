@@ -26,6 +26,9 @@ public class ImmutableLinkedList implements ImmutableList {
             curNode = curNode.getNext();
         }
     }
+    public Node getHead(){
+        return head;
+    }
 
     @Override
     public ImmutableLinkedList add(Object e) {
@@ -264,8 +267,8 @@ public class ImmutableLinkedList implements ImmutableList {
     }
 
     public class Node<T> {
-        private T data;
-        private Node<T> next;
+        public T data;
+        public Node<T> next;
 
         public Node() {
 

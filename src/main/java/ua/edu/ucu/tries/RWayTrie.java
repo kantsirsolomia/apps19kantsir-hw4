@@ -100,15 +100,8 @@ public class RWayTrie implements Trie {
     private void collect(Node x, String pre,
                          Queue q)
     {
-        if (x == null)
-            return;
-        if (x.val != null) {
-            q.enqueue(pre);
-//            System.out.println("aaaaa");
-//            System.out.println(a);
-
-        }
-
+        if (x == null) return;
+        if (x.val != null) q.enqueue(pre);
         for (char c = 0; c < R; c++)
             collect(x.next[c], pre + c, q);
     }
@@ -121,17 +114,9 @@ public class RWayTrie implements Trie {
 
     @Override
     public Iterable<String> wordsWithPrefix(String s) {
-        Queue q = new Queue();
+        Queue<String> q = new Queue();
         collect(get(root, s, 0), s, q);
-        int size = q.size();
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i< size; i++){
-            Object a = q.dequeue();
-
-            list.add( (String) a);
-//
-        }
-        return list;
+        return q;
     }
 
     @Override

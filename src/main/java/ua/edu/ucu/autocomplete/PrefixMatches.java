@@ -4,6 +4,7 @@ import ua.edu.ucu.tries.Trie;
 import ua.edu.ucu.tries.Tuple;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -41,26 +42,38 @@ public class PrefixMatches {
     }
 
     public Iterable<String> wordsWithPrefix(String pref) {
+
         return trie.wordsWithPrefix(pref);
     }
 
     public Iterable<String> wordsWithPrefix(String pref, int k) {
-        if (pref.length() < 2) {
-            throw new IllegalArgumentException();
+        if (pref.length()<2||k<0){
+            return null;
         }
-        List<String> words = new ArrayList<>();
-        Iterable<String> trieWords = trie.wordsWithPrefix(pref);
-        if (k == 1) {
-            words.add(pref);
-        } else {
-            for (String w : trieWords) {
-                words.add(w);
+        Iterable<String> old = trie.wordsWithPrefix(pref);
+        List<String> newlist = new ArrayList();
+        for (String str: old) {
+            if(str.length()>=pref.length()){
+                newlist.add(str);
             }
-            words.sort(Comparator.comparingInt(String::length));
-            int cut = Math.min(words.size(), k + 1);
-            words = words.subList(0, cut);
         }
-        return words;
+        Collections.sort(newlist, Comparator.comparing(String::length));;
+
+        int i = 0;
+        int cur_len = 0;
+        List<String> out = new ArrayList();
+        for (String strr : newlist) {
+            if (cur_len != strr.length()) {
+                cur_len = strr.length();
+                i++;
+                if (i == k + 1) {
+                    break;
+                }
+
+            }
+            out.add(strr);
+        }
+        return out;
     }
 
     public int size() {
